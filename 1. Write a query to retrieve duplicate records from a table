@@ -1,0 +1,7 @@
+drop table if exists test;
+create table test ( id INT IDENTITY(1, 1), a  INT, b  INT, PRIMARY KEY(id) );
+INSERT INTO test(a,b) VALUES (1,1), (1,2), (1,1);
+SELECT a, b, COUNT(*) occurrences
+FROM test GROUP BY a, b
+HAVING 
+    COUNT(*) > 1;
