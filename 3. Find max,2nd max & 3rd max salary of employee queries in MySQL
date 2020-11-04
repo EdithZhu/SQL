@@ -1,0 +1,15 @@
+drop table if exists Employee;
+CREATE TABLE Employee(id INT, name VARCHAR(50) NOT NULL, salary INT);
+INSERT INTO Employee VALUES
+(1, 'A', 1000),
+(2, 'B', 6000),
+(3, 'C', 9000),
+(4, 'D', 3000),
+(5, 'E', 8000);
+SELECT id, name, MAX(salary) FROM Employee WHERE salary < ( SELECT Max(salary) FROM Employee);
+SELECT id, name, salary FROM Employee ORDER BY salary DESC LIMIT 3-1,1;
+Select id, name, salary from Employee
+    where salary >=(select max(salary) from Employee
+    where salary < (select max(salary) from Employee
+    where salary < (select max(salary) from Employee)))
+    order by salary DESC;
