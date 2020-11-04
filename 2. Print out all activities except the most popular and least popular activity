@@ -1,0 +1,12 @@
+drop table if exists Friends;
+CREATE TABLE Friends(id INT, name VARCHAR(50) NOT NULL, activity VARCHAR(50) NOT NULL);
+INSERT INTO Friends VALUES
+(1, 'A', 'football'),
+(2, 'B', 'swimming'),
+(3, 'C', 'tenis'),
+(4, 'D', 'tenis'),
+(5, 'E', 'football'),
+(6, 'F', 'football');
+select activity, count(*) occurrences from Friends group by activity
+having count(*) > (select count(*) from Friends group by activity order by count(*) limit 1)
+   and count(*) < (select count(*) from Friends group by activity order by count(*) desc limit 1)
