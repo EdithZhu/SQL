@@ -1,0 +1,31 @@
+# Write your MySQL query statement below
+SELECT T.REQUEST_AT AS "DAY",
+ROUND(SUM(CASE WHEN T.STATUS LIKE "%CANCELLED%" THEN 1 ELSE 0 END) / COUNT(*), 2)
+AS "CANCELLATION RATE"
+FROM TRIPS T
+WHERE T.CLIENT_ID IN
+(
+    SELECT USERS_ID FROM USERS WHERE BANNED = "NO" AND ROLE = "CLIENT"
+)
+AND T.DRIVER_ID IN
+(
+    SELECT USERS_ID FROM USERS WHERE BANNED = "NO" AND ROLE = "DRIVER"
+)
+AND T.REQUEST_AT >= '2013-10-01' AND T.REQUEST_AT <= '2013-10-03'
+GROUP BY T.REQUEST_AT
+ORDER BY T.REQUEST_AT
+
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+Select Request_at as "Day",
+ROUND(sum(case when status='cancelled_by_driver' or status='cancelled_by_client' then 1 else 0 end)/count(*),2) as "Cancellation Rate" 
+FROM Trips 
+WHERE Request_at between '2013-10-01' and '2013-10-03'
+AND Client_id NOT IN (Select Users_Id from Users where Banned='Yes')
+AND Driver_Id NOT IN (Select Users_Id from Users where Banned='Yes')
+group by Request_at 
+order by Request_at;
