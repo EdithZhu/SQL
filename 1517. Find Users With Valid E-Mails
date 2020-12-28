@@ -1,0 +1,11 @@
+# Write your MySQL query statement below
+SELECT U.* FROM USERS U
+WHERE U.MAIL REGEXP('^[a-zA-Z][[a-zA-Z0-9]\_\.\-]*@leetcode.com')
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+SELECT U.* FROM USERS U
+WHERE REGEXP_LIKE(U.MAIL,'^[a-z]+[a-z0-9_\.\-]*@leetcode.com','i')
