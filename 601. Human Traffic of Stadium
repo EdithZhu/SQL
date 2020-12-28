@@ -1,0 +1,38 @@
+# Write your MySQL query statement below
+SELECT DISTINCT S.* FROM STADIUM S, 
+(
+    SELECT CASE
+    WHEN PEOPLE < 100 THEN @NUM := 0
+    WHEN PEOPLE >= 100 THEN @NUM := @NUM + 1
+    END AS AMOUNT, 
+    ID FROM STADIUM, (SELECT @NUM := 0) AS TMP
+) AS S1
+WHERE S1.AMOUNT >= 3
+AND S.ID <= S1.ID 
+AND S.ID >= S1.ID - S1.AMOUNT + 1
+
+
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+select distinct s1.id AS "id",
+TO_CHAR(s1.visit_date, 'YYYY-MM-DD') AS "visit_date", 
+s1.people AS "people"
+from stadium s1, stadium s2, stadium s3
+where s1.people >= 100 and s2.people >= 100 and s3.people >= 100
+and
+(
+	/* s3, s2, s1 */ 
+    (s1.id - s2.id = 1 and s2.id - s3.id = 1)
+    or
+    /* s3, s1, s2 */ 
+    (s2.id - s1.id = 1 and s1.id - s3.id = 1)
+    or
+    /* s1, s2, s3 */ 
+    (s3.id - s2.id = 1 and s2.id - s1.id =1)
+)
+order by s1.id
+;
