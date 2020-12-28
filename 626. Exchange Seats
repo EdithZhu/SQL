@@ -1,0 +1,22 @@
+# Write your MySQL query statement below
+SELECT CASE 
+WHEN SEAT.ID = (SELECT COUNT(*) FROM SEAT) AND SEAT.ID % 2 <> 0
+THEN SEAT.ID
+WHEN SEAT.ID % 2 = 0 THEN SEAT.ID - 1
+ELSE SEAT.ID + 1
+END AS ID,
+STUDENT FROM SEAT
+ORDER BY ID;
+
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+SELECT (CASE WHEN MOD(ID,2) = 0 THEN ID - 1
+       WHEN ID=(SELECT COUNT(*) FROM SEAT) THEN ID
+       ELSE ID + 1
+       END) AS "id",
+       STUDENT AS "student" FROM SEAT
+       ORDER BY "id";
