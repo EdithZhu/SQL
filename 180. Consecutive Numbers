@@ -4,6 +4,23 @@ WHERE A.ID = B.ID - 1 AND B.ID = C.ID - 1 AND A.NUM = B.NUM AND B.NUM = C.NUM;
 
 
 
+
+# Write your MySQL query statement below
+SELECT DISTINCT NUM AS CONSECUTIVENUMS FROM (
+    SELECT NUM, SUM(T1) OVER (ORDER BY ID) AS T2 FROM (
+        SELECT ID, NUM, CASE 
+        WHEN LAG(NUM) OVER (ORDER BY ID) - NUM != 0 THEN 1
+        ELSE 0
+        END AS T1
+        FROM LOGS
+    ) AS T3
+) AS T4
+GROUP BY NUM, T2
+HAVING COUNT(*) >= 3
+
+
+
+
 /* Write your PL/SQL query statement below */
 SELECT DISTINCT A.NUM AS CONSECUTIVENUMS FROM LOGS A, LOGS B, LOGS C
 WHERE A.ID = B.ID - 1 AND B.ID = C.ID - 1 AND A.NUM = B.NUM AND B.NUM = C.NUM;
