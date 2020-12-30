@@ -1,0 +1,17 @@
+# Write your MySQL query statement below
+WITH T1 AS (
+    SELECT *,COUNT(ACTIVITY) OVER (PARTITION BY ACTIVITY) AS NUM FROM FRIENDS
+)
+SELECT DISTINCT ACTIVITY FROM T1
+WHERE NUM <> (SELECT MAX(NUM) FROM T1) AND NUM <> (SELECT MIN(NUM) FROM T1)
+
+
+
+# Write your MySQL query statement below
+SELECT activity
+FROM Friends 
+GROUP BY activity
+HAVING 
+    COUNT(*) <> (SELECT COUNT(*) FROM Friends GROUP BY activity ORDER BY 1 LIMIT 1)
+    AND
+    COUNT(*) <> (SELECT COUNT(*) FROM Friends GROUP BY activity ORDER BY 1 DESC LIMIT 1);
