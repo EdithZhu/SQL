@@ -1,0 +1,26 @@
+# Write your MySQL query statement below
+SELECT DISTINCT l1.id, A.name
+FROM Logins l1
+JOIN Logins l2
+ON l1.id = l2.id AND DATEDIFF(l2.login_date, l1.login_date) BETWEEN 1 AND 4
+JOIN Accounts A
+ON l1.id = A.id
+GROUP BY l1.id, l1.login_date
+HAVING COUNT(DISTINCT l2.login_date) >= 4
+
+
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+select distinct A.id,acc.name from (
+select id, login_date,
+lead(login_date,4) over (partition by id order by login_date) as lead_date
+from 
+(select distinct id, login_date from Logins) 
+) A
+inner join Accounts acc on A.id = acc.id
+where A.lead_date = A.login_date + 4
+order by 1
