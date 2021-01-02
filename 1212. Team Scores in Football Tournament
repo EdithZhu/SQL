@@ -1,0 +1,41 @@
+# Write your MySQL query statement below
+SELECT team_id, team_name,
+SUM(
+    CASE WHEN team_id = host_team AND host_goals > guest_goals THEN 3
+         WHEN team_id = guest_team AND guest_goals > host_goals THEN 3
+         WHEN host_goals = guest_goals THEN 1
+         ELSE 0
+    END          
+) AS "num_points"
+FROM Teams t
+LEFT JOIN Matches m ON t.team_id = m.host_team OR t.team_id = m.guest_team
+GROUP BY team_id, team_name
+ORDER BY num_points DESC, team_id
+
+
+
+
+
+
+
+
+/* Write your PL/SQL query statement below */
+with abc as(
+select host_team,guest_team,case 
+    when host_goals>guest_goals then 3 
+    when host_goals=guest_goals then 1 
+    else 0 
+    end host_points, 
+    case when guest_goals>host_goals then 3 
+    when host_goals=guest_goals then 1 
+    else 0 
+    end guests_points
+from matches)
+select t.team_id team_id,t.team_name team_name,sum(nvl(h.host_points,0)+ nvl(g.guests_points,0)) num_points
+from teams t
+left join (select host_team,sum(host_points) host_points from abc group by host_team) h
+on(t.team_id=h.host_team)
+left join (select guest_team,sum(guests_points) guests_points from abc group by guest_team) g
+on(t.team_id=g.guest_team)
+group by t.team_id,t.team_name
+order by sum(nvl(h.host_points,0)+ nvl(g.guests_points,0)) desc,t.team_id;
