@@ -1,0 +1,14 @@
+# Write your MySQL query statement below
+SELECT ROUND(AVG(RATE)*100,2) AS average_daily_percent
+FROM (
+    SELECT T1.ACTION_DATE, 
+    SUM(T1.ACTION_DATE <= R.REMOVE_DATE AND T1.POST_ID = R.POST_ID)
+    /
+    COUNT(DISTINCT T1.POST_ID)
+    AS RATE
+    FROM (
+        SELECT DISTINCT POST_ID,ACTION_DATE, EXTRA FROM ACTIONS
+    ) AS T1, REMOVALS R
+    WHERE T1.EXTRA = 'spam'
+    GROUP BY 1
+) AS T2
