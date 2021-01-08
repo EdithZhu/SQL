@@ -1,0 +1,9 @@
+# Write your MySQL query statement below
+SELECT T1.Id, T1.Company, T1.Salary
+FROM (
+    SELECT Id, Company, Salary, 
+    DENSE_RANK() OVER (PARTITION BY Company ORDER BY Salary, Id) AS Sort, 
+    COUNT(1) OVER (PARTITION BY Company) / 2.0 AS Counts
+    FROM Employee 
+) T1
+WHERE Sort BETWEEN Counts AND Counts + 1
